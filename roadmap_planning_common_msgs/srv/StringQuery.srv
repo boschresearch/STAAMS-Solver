@@ -1,0 +1,4 @@
+string[] input
+---
+string[] output
+bool success

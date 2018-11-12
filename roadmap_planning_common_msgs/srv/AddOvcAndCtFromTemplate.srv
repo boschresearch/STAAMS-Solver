@@ -1,0 +1,5 @@
+string name
+string[] locations
+---
+bool success
+string msg

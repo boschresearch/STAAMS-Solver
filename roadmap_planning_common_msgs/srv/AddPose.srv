@@ -1,0 +1,5 @@
+geometry_msgs/PoseStamped pose
+string loc_type
+string loc_name
+---
+bool success

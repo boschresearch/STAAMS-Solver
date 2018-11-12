@@ -1,0 +1,7 @@
+roadmap_planning_common_msgs/ConstraintType ct_type
+string[] ct_vars
+int32[] params
+---
+bool success
+string msg
+

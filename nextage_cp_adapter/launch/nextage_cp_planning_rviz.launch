@@ -1,0 +1,17 @@
+
+<launch>
+  <arg name="debug" default="false" />
+  <arg name="kinematics_conf" default="$(find nextage_moveit_config)/config/kinematics_kdl.yaml" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
+
+  <arg name="RVIZ_FIXEDFRAME" default="map" />
+
+  <arg name="command_args_rviz" value="--fixed-frame $(arg RVIZ_FIXEDFRAME) -d $(find nextage_cp_adapter)/cfg/nextage_cp.rviz" />
+
+  <node name="$(anon rviz)" launch-prefix="$(arg launch_prefix)" pkg="rviz" type="rviz" respawn="false"
+	args="$(arg command_args_rviz)" output="screen">
+    <rosparam command="load" file="$(arg kinematics_conf)" />
+  </node>
+
+</launch>

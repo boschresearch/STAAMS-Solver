@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package>
+  <name>rospy_message_converter</name>
+  <version>0.4.0</version>
+  <description>Converts between Python dictionaries and JSON to rospy messages.</description>
+  <maintainer email="baalexander@gmail.com">Brandon Alexander</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/rospy_message_converter</url>
+  <author email="baalexander@gmail.com">Brandon Alexander</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>message_generation</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>rostest</build_depend>
+
+  ### JAN BEHRENS (jan.behrens@de.bosch.com - 2018-10-30): Adding build_depends to make catkin_lint happy
+  <build_depend>roslib</build_depend>
+  <build_depend>rospy</build_depend>
+  #######################################################################################################
+
+  <run_depend>roslib</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>std_msgs</run_depend>
+</package>

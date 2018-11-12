@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<robot name="block">
+
+ <link name="block_frame">
+  <visual>
+   <geometry>
+    <!--
+    <mesh>
+      <uri>model://block/meshes/block_visual.dae</uri>
+    </mesh> 
+    -->
+    <mesh filename="package://cp_planning_example/models/block/meshes/block_visual.dae"/>
+   </geometry>
+  </visual> 
+ </link>
+
+</robot>

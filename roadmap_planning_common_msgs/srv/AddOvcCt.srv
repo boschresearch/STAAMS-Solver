@@ -1,0 +1,9 @@
+# roadmap_planning_common_msgs/ConstraintType ct_type
+# roadmap_planning_common_msgs/OrderedVisitingConstraint[] ovc
+# int32[] interval
+# int32[] params
+roadmap_planning_common_msgs/InterOVCConstraint ct
+---
+bool success
+string msg
+

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Run catkin_lint and check for any findings.
+catkinlintcmd="$(catkin_lint -W2 --strict --quiet --ignore uninstalled_script .)"
+if [ $(echo -n $catkinlintcmd | wc -c) -ne 0 ]
+then
+    check_catkinlint=1
+    echo "catkin_lint: errors"
+    echo $catkinlintcmd
+else
+    check_catkinlint=0
+    echo "catkin_lint: no errors"
+fi
+
+# Fail the commit if any errors have been found.
+if [ $check_catkinlint == 1 ]; then
+    exit 1
+fi

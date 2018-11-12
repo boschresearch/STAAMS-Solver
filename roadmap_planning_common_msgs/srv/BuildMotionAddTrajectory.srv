@@ -1,0 +1,8 @@
+string prm_name
+string prm_pickle
+string move_group
+int64[] prm_pos
+int64[] time
+---
+bool success
+string msg

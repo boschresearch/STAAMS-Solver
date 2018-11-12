@@ -1,0 +1,6 @@
+string group
+int32 state_index
+Domain values
+bool use_location
+---
+bool success

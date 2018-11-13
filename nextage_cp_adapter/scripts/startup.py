@@ -89,7 +89,6 @@ class NextageStartupManager:
         mg_left = moveit_commander.MoveGroupCommander("left_arm")
 
         rospy.sleep(2.0)
-        print("executed right plan 1")
 
         pose_right = moveit_commander.PoseStamped()
         pose_right.header.frame_id = 'WAIST'
@@ -102,17 +101,11 @@ class NextageStartupManager:
         pose_right.pose.orientation.z = 0.0
         pose_right.pose.orientation.w = 0.707106781187
 
-        print("executed right plan 2")
         mg_right.set_pose_target(pose_right, mg_right.get_end_effector_link())
-        print("executed right plan 3")
         mg_right.set_start_state_to_current_state()
-        print("executed right plan 4")
         plan = mg_right.plan()
-        print("executed right plan 5")
 
         mg_right.execute(plan)
-
-        print("executed right plan 6")
 
         pose_left = copy.copy(pose_right)
         pose_left.pose.position.y = 0.5

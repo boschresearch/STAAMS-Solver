@@ -19,9 +19,6 @@ import math
 import moveit_commander
 import rospy
 import numpy as np
-
-
-from roadmap_tools.kinematics_interface import StateValidity, InverseKinematics, ForwardKinematics
 from trajectory_msgs.msg import JointTrajectoryPoint
 
 

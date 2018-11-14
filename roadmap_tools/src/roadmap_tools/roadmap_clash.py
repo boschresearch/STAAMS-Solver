@@ -168,10 +168,12 @@ class RoadMapClash:
         # type: (dict[str, RoadMap]) -> void
 
         for group in self.groups:
-            assert group in self.clashes[group].keys()
+            assert group in [clash_name[0] for clash_name in self.clashes.keys()]
             assert group in roadmaps.keys()
-            assert len(self.clashes[group].keys()) == roadmaps[group].get_number_of_vertices()
 
+        for clash_key in self.clashes.keys():
+            gn_0 = clash_key[0]
+            assert len(self.clashes[clash_key].keys()) == roadmaps[gn_0].get_number_of_vertices()
         return
 
     def build_robot_state(self, prm_1, v1, prm_2, v2):

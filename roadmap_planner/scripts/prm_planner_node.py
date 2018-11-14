@@ -165,6 +165,7 @@ class RoadmapPlannerNode:
         res.success = False
 
         if req.object_name != "travel" and len(self.get_locations_for_names([req.object_name])) > 0:
+            rospy.loginfo("A location with name {} is already registered in roadmaps".format(req.object_name))
             return res
 
         ct_open_list = []
@@ -214,7 +215,6 @@ class RoadmapPlannerNode:
                 if key[0] == rm_name:
                     it = itertools.product([vert], self.rp.roadmaps[key[-1]].vertices())
                     self.roadmap_util.amend_clash_for_prms(self.rp.roadmaps[key[0]], self.rp.roadmaps[key[-1]], self.rp.clash.clashes[key], self.rp.clash.clashes[(key[-1], key[0])], it, self.robot_info)
-                print("hallo")
             # make collision checks and amend collision tables
         if res.success:
             self.update_sosm()

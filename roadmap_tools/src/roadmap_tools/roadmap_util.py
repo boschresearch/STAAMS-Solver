@@ -276,11 +276,30 @@ class RoadmapUtils:
         return dist
 
     # TODO: test compute clash refactoring
-    def amend_clash_for_prms(self, prm1, prm2, clash1, clash2, it, robot_info=None):
+    def amend_clash_for_prms(self, prm1, prm2, clash1, clash2, it=None, robot_info=None):
+        # type: (RoadMap, RoadMap, dict[int, list[int]], dict[int, list[int]], None, RobotInfo) -> None
         sv = self.sv
         start_time = time.time()
 
         elapsed_time = time.time() - start_time
+
+        # when method is called without iterator, we complete the whole clash with recursive calls
+        if it is None:
+            # find all vertices which are not in handled in clash
+            not_in_clash_1 = set(prm1.vertices()).difference(clash1.keys())
+            not_in_clash_2 = set(prm2.vertices()).difference(clash2.keys())
+            if len(not_in_clash_1) > 0 or len(not_in_clash_2) > 0:
+                if len(not_in_clash_1) > 0:
+                    it = itertools.product(not_in_clash_1, prm2.vertices())
+                    self.amend_clash_for_prms(prm1, prm2, clash1, clash2, it, robot_info)
+                    self.amend_clash_for_prms(prm1, prm2, clash1, clash2, None, robot_info)
+                    return
+                if len(not_in_clash_2) > 0:
+                    it = itertools.product(not_in_clash_2, prm1.vertices())
+                    self.amend_clash_for_prms(prm2, prm1, clash2, clash1, it, robot_info)
+                    return
+            return
+
         print elapsed_time
         count = 0
         for t in it:  # type: tuple[Vertex, Vertex]

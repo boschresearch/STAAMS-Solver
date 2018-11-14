@@ -406,9 +406,9 @@ class RoadmapPlannerNode:
         res = AddOvcCtResponse()
 
         ovc_names = []
-        for OVC in req.ovc:
+        for ovc_name in req.ct.ovc_name:
             try:
-                name = int(OVC.name)
+                name = int(ovc_name)
                 ovc_names.append(name)
             except ValueError:
                 rospy.logerr("Got invalid name {}. Only Strings convertible to ints are allowed.".format(OVC.name))
@@ -424,16 +424,16 @@ class RoadmapPlannerNode:
                 res.msg = "Cannot add constraint regarding OVC {}, because it doesn't exist.".format(name)
                 return res
 
-        assert len(ovc_names) == len(req.interval)
+        assert len(ovc_names) == len(req.ct.ovc_interval)
         intervals = []
         ovc_list = []
-        for name, interval in zip(ovc_names, req.interval):
+        for name, interval in zip(ovc_names, req.ct.ovc_interval):
             intervals.append(self._OVC[name].getInterval(interval))
             ovc_list.append(self._OVC[name])
 
         ###############################################################################
         # the first interval in intervals must start after all remaining intervals
-        if req.ct_type.val == ConstraintType.StartsAfterEnd:
+        if req.ct.ct_type.val == ConstraintType.StartsAfterEnd:
             solver = self.rp.solver
             if len(intervals) < 2:
                 res.success = False
@@ -459,7 +459,7 @@ class RoadmapPlannerNode:
             res.success = True
             res.msg = "Added {} constraints to the solver.".format(len(intervals) - 1)
 
-        #TODO: implement more constraints
+        #TODO: implement more constraints (e.g. on connection variables)
 
         return res
 

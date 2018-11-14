@@ -119,13 +119,13 @@ class PlannerServiceProxies:
         add_ovc_ct_client = rospy.ServiceProxy("/prm_planner_wrapper/add_ovc_ct", AddOvcCt)
 
         req = AddOvcCtRequest()
-        req.ovc = ovc
-        req.ct_type.val = ct_type
-        req.interval = interval
+        req.ct.ovc_name = [o.name for o in ovc]
+        req.ct.ct_type.val = ct_type
+        req.ct.ovc_interval = interval
         if params is None:
-            req.params = []
+            req.ct.params = []
         else:
-            req.params = []
+            req.ct.params = params
 
         res = add_ovc_ct_client.call(req)  # type: AddOvcCtResponse
         return res

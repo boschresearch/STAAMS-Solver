@@ -344,6 +344,15 @@ class RoadmapPlannerNode:
         else:
             self.rp.clash.load_clash(groups=self.group_names, file_name=self.clash_name)
 
+        # complete the clashes for all combinations of roadmaps
+        it = itertools.combinations(self.rp.roadmaps.values(), 2)
+        for rm1, rm2 in it:
+            clash_1 = self.rp.clash.get_clash(rm1.get_group_name(), rm2.get_group_name())
+            clash_2 = self.rp.clash.get_clash(rm2.get_group_name(), rm1.get_group_name())
+            self.roadmap_util.amend_clash_for_prms(rm1, rm2, clash_1, clash_2, it=None, robot_info=self.robot_info)
+
+        self.rp.clash.verify_clash_roadmap_combinations(self.rp.roadmaps)
+
         sosm = SceneObjectSearchMapping(self.rp.roadmaps.values())
         self.rp.sosm = sosm
 

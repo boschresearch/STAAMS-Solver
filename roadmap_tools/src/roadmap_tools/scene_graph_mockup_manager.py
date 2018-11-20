@@ -26,8 +26,6 @@ from geometry_msgs.msg import TransformStamped
 
 import tf2_geometry_msgs
 
-import nextage_movement_skills.srv
-
 from roadmap_planning_common_msgs.srv import StringQuery, StringQueryResponse, AddObject, AddObjectResponse, AddObjectRequest
 
 import moveit_commander
@@ -875,32 +873,6 @@ class SceneGraphMockupManager:
         self.delete_planning_scene()
         rospy.sleep(1.0)
         rospy.loginfo("Shutdown complete")
-
-    # TODO: delete
-    def goto_pose(self, pose, group, eef):
-        success = False
-        # rospy.sleep(1.0)
-        try:
-            nextage_move_rarm = rospy.ServiceProxy('nextage_move_rarm', nextage_movement_skills.srv.MoveArm)
-            nextage_move_larm = rospy.ServiceProxy('nextage_move_larm', nextage_movement_skills.srv.MoveArm)
-            trans = self.tfBuffer.lookup_transform('WAIST', pose.header.frame_id, rospy.Time(0), rospy.Duration(1.0))
-            # trans = tfBuffer.lookup_transform(resp1.view_pose.header.frame_id, 'WAIST', rospy.Time(0), rospy.Duration(1.0))
-            pose_transformed = tf2_geometry_msgs.do_transform_pose(pose, trans)
-            # print(pose_transformed)
-            rospy.sleep(1.0)
-            if group == 'right_arm':
-                resp2 = nextage_move_rarm(False, 0.9, pose_transformed)
-                success = resp2.Success
-            if group == 'left_arm':
-                resp2 = nextage_move_larm(False, 0.9, pose_transformed)
-                success = resp2.Success
-
-        except rospy.ServiceException, e:
-            print "Service call failed: %s" % e
-
-        rospy.sleep(1.0)
-
-        return success
 
     def gripper_static_transform(self, robot_name='kawada'):
         #broadcaster = self.static_transform_broadcaster

@@ -10,13 +10,8 @@ LICENSE file in the root directory of this source tree.
 """
 
 from geometry_msgs.msg import PoseStamped
-
 import rospy
-
-from nextage_movement_skills.srv import StringQueryResponse, StringQuery, StringQueryRequest, AddPose, AddPoseRequest, \
-    AddObject, AddObjectRequest
-from std_srvs.srv import SetBoolRequest, SetBool
-
+from roadmap_planning_common_msgs.srv import StringQueryResponse, StringQuery, StringQueryRequest
 import cPickle as pickle
 
 

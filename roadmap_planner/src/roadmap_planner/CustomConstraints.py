@@ -1162,8 +1162,6 @@ class BindIntervalsCt(pywrapcp.PyConstraint):
             print("IndexError in BindIntervalsCt. Check consistency of roadmap and clash data!")
 
 
-
-
 class IndexedEqualityCt(pywrapcp.PyConstraint):
     def __init__(self, solver, var_list, index_var, equal_val):
         pywrapcp.PyConstraint.__init__(self, solver)
@@ -1217,9 +1215,12 @@ class IndexedEqualityVarCt(pywrapcp.PyConstraint):
     def Propagate(self):
         solver = self.solver()
 
-        solver.AddConstraint(self._var_list[self._index_var.Value()] == self._equal_var)
-        # self._var_list[self._index_var.Value()].SetValues(self._equal_val)
-        # solver.AddConstraint(self._var_list[self._index_var.Value()] == self._equal_val)
+        if self._equal_var.Bound():
+            index = self._index_var.Value()
+            value = self._equal_var.Value()
+            self._var_list[index].SetValue(value)
+        else:
+            solver.AddConstraint(self._var_list[self._index_var.Value()] == self._equal_var)
 
     def PropagateVarDomain(self, i):
         # remove i from index_var domain, if the domains of equal_var and var_list[i] have no

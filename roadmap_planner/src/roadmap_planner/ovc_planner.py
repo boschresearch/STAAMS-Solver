@@ -24,7 +24,7 @@ from roadmap_tools.SceneObjectSearchMapping import SceneObjectSearchMapping
 
 from CustomConstraints import IntervalClashCt, Edge2IntervalDurationCt, PathFeasibleCt, \
     MoveOnGraphCt, InGoal2StatesCt, EndBound2UpperBoundCt, ConnectedComponentCt, BindIntervalsCt, IndexedEqualityCt, \
-    HorizonConfigurationCt, BrushArmAssignment2PnPTasks, IndexedEqualityVarCt
+    HorizonConfigurationCt, BrushArmAssignment2PnPTasks, IndexedEqualityVarCt, ConnectSameGroupCt
 
 from ordered_visiting_ct_var import OrderedVisitingConstraintVar
 from roadmap_planner.solution_saving import *
@@ -645,9 +645,21 @@ class OvcPlanner:
             for conf_var in self.intvar_lists["c_" + gn]:  # type: pywrapcp.IntVar
                 conf_var.SetValues(conf_domain)
 
+    def constrain_conn_group(self):
+        conn_var_dict = {}
+        group_var_dict = {}
+        for var in self.ordered_visiting_cst_vars:  # type: OrderedVisitingConstraintVar
+            execution_group, conf_var, loc_var, connect_var, intervals = var.get_var_list()
+            conn_var_dict[var.get_name()] = connect_var
+            group_var_dict[var.get_name()] = execution_group
+
+        ct = ConnectSameGroupCt(self.solver, conn_var_dict, group_var_dict)
+        self.solver.Add(ct)
+
     def ovc_search(self, exp=None, luby_constant=5, EXECUTE_MOTION=False, time_limit=5000, seed=None, bc_solution=None,
                    bc_solver_stats=None, bc_extra_sol_files=None, bc_motion_req=None):
         self.constrain_conf_vars()
+        self.constrain_conn_group()
         solver = self.solver
         rand = random.Random()
         if not seed:

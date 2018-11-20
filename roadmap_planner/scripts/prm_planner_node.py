@@ -451,13 +451,22 @@ class RoadmapPlannerNode:
 
             pri_int = intervals[0]  # type: pywrapcp.IntervalVar
             pri_ovc = ovc_list[0]  # type: OrderedVisitingConstraintVar
-            for sec_int, sec_ovc in zip(intervals[1:], ovc_list[1:]):  # type: (pywrapcp.IntervalVar, OrderedVisitingConstraintVar)
+            pri_int_ind = req.ct.ovc_interval[0]
+            for sec_int, sec_ovc, sec_int_ind in zip(intervals[1:], ovc_list[1:], req.ct.ovc_interval[1:]):  # type: (pywrapcp.IntervalVar, OrderedVisitingConstraintVar, int)
                 # ct = pri_int.StartsAfterEnd(sec_int)  # type: pywrapcp.Constraint
                 ct = sec_int.StartsAfterEnd(pri_int)
                 check_res = solver.CheckConstraint(ct)
                 rospy.loginfo("Checked constraint {} with result: {}.".format(ct, check_res))
                 solver.Add(ct)
                 rospy.loginfo("Added Constraint {} to the solver.".format(ct))
+
+                # adding dependencies between OVCs to be considered in the variable selection heuristic
+                self.rp.dependencies.addDependency(
+                    sec_ovc._conf_connect_vars[sec_int_ind],
+                    pri_ovc._conf_connect_vars[pri_int_ind],
+                    dependency_type=1
+                )
+
                 from roadmap_planner.CustomConstraints import CondOVCMonotonicCt
                 ct = CondOVCMonotonicCt(solver, [pri_ovc, sec_ovc])
                 check_res = solver.CheckConstraint(ct)
@@ -467,8 +476,6 @@ class RoadmapPlannerNode:
 
             res.success = True
             res.msg = "Added {} constraints to the solver.".format(len(intervals) - 1)
-
-        #TODO: implement more constraints (e.g. on connection variables)
 
         return res
 

@@ -37,6 +37,7 @@ from std_srvs.srv import EmptyRequest, Empty, EmptyResponse
 from roadmap_tools.prm_factory import RoadMapFactory
 from roadmap_tools.roadmap_clash import RoadMapClash
 from roadmap_tools.prm import RoadMap
+from roadmap_planner.DependencyDecisionBuilder import DependencyDecisionBuilder
 from datetime import datetime
 
 # import plotly.plotly as py
@@ -67,6 +68,8 @@ class OvcPlanner:
 
         self.db = None
         self.search_monitors = None
+
+        self.dependencies = DependencyDecisionBuilder()
 
         # self.var_dict = {}  # type: dict[str, list[pywrapcp.IntVar]]
 
@@ -420,6 +423,13 @@ class OvcPlanner:
                     # self.solver.Add(ct)
         self.solver.Add(BindIntervalsGroupCt(self.solver, ovc._execution_group, cts))
 
+        if self.dependencies:
+            for connect_var in ovc._conf_connect_vars:
+                self.dependencies.addTask(connect_var)
+            if len(ovc._conf_connect_vars) >= 2:
+                for con_1, con_2 in zip(ovc._conf_connect_vars[:-2], ovc._conf_connect_vars[1:-1]):
+                    self.dependencies.addDependency(con_2, con_1)
+
         self.ordered_visiting_cst_vars.append(ovc)
 
         return ovc
@@ -690,7 +700,8 @@ class OvcPlanner:
         conf_vars_db = self.solver.Phase(conf_vars, solver.CHOOSE_FIRST_UNBOUND, solver.ASSIGN_RANDOM_VALUE)
         loc_vars_db = self.solver.Phase(loc_vars, solver.CHOOSE_FIRST_UNBOUND, solver.ASSIGN_RANDOM_VALUE)
         # connect_vars_db = self.solver.Phase(connect_vars, solver.CHOOSE_FIRST_UNBOUND, solver.ASSIGN_MIN_VALUE)
-        connect_vars_db = self.solver.Phase(connect_vars, solver.CHOOSE_RANDOM, solver.ASSIGN_MIN_VALUE)
+        # connect_vars_db = self.solver.Phase(connect_vars, solver.CHOOSE_RANDOM, solver.ASSIGN_MIN_VALUE)
+        connect_vars_db = self.dependencies
         # connect_vars_db = self.solver.Phase(connect_vars, solver.CHOOSE_RANDOM, solver.ASSIGN_CENTER_VALUE)
 
         # concat the OVC vars with a relevant order - VARIABLE ORDERING
@@ -733,6 +744,8 @@ class OvcPlanner:
 
         # solution variables
         count = 0
+
+        self.dependencies.DrawDependencies()
 
         solutions = []
         solution_end_times = []

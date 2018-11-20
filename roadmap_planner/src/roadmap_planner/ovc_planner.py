@@ -338,7 +338,7 @@ class OvcPlanner:
 
     def addOVC(self, group, locations=[]):
         '''
-        This function adds an Oredered visiting constraint for a fixed group and order.
+        This function adds an Ordered visiting constraint for a fixed group and order.
         :param group:
         :param locations:
         :return:
@@ -370,7 +370,7 @@ class OvcPlanner:
 
     def addFreeOVC(self, groups=[], locations=[], ranges=None):
         '''
-        This function adds an Oredered visiting constraint for a free group and order.
+        This function adds an Ordered visiting constraint for a free group and order.
         :param group: the robot components that should be considered fot the task
         :param locations: a list of lists with locations (integer)
         :return: the ovc object

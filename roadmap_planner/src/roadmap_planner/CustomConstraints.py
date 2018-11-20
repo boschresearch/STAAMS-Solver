@@ -1239,9 +1239,37 @@ class IndexedEqualityVarCt(pywrapcp.PyConstraint):
             self.PropagateVarDomain(i)
 
 
+class ConnectSameGroupCt(pywrapcp.PyConstraint):
+    """ this constraint adds alldifferent constraints on all connection variables dealing with the same group """
+    def __init__(self, solver, index_vars_dict, group_vars_dict):
+        pywrapcp.PyConstraint.__init__(self, solver)
+        self._index_vars_dict = index_vars_dict
+        self._group_vars_dict = group_vars_dict
 
+    def Post(self):
+        for i, var in self._group_vars_dict.items():
+            demon = self.Demon(ConnectSameGroupCt.PropagateGroupBound, i)
+            var.WhenBound(demon)
 
+    def InitialPropagate(self):
+        pass
 
+    def Propagate(self):
+        pass
+
+    def PropagateGroupBound(self, i):
+        # collect connection vars bound to same group and cast alldifferent on them
+        solver = self.solver()  # type: pywrapcp.Solver
+        group_val = self._group_vars_dict[i].Value()
+        group_vars_bound_to_same = []
+        conn_vars_bound_to_same = []
+        for gv_key, group_var in self._group_vars_dict.items():
+            if group_var.Bound() and group_var.Value() == group_val:
+                group_vars_bound_to_same.append(group_var)
+                conn_vars_bound_to_same += self._index_vars_dict[gv_key]
+
+        ct = solver.AllDifferent(conn_vars_bound_to_same)
+        solver.AddConstraint(ct)
 
 
 class HorizonConfigurationCt(pywrapcp.PyConstraint):

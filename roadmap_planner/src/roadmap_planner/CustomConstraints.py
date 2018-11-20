@@ -1181,9 +1181,7 @@ class IndexedEqualityCt(pywrapcp.PyConstraint):
         pass
 
     def Propagate(self):
-        solver = self.solver()
         self._var_list[self._index_var.Value()].SetValue(self._equal_val)
-        # solver.AddConstraint(self._var_list[self._index_var.Value()] == self._equal_val)
 
     def PropagateVarDomain(self, i):
         if not self._var_list[i].Contains(self._equal_val):

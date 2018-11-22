@@ -9,6 +9,7 @@ LICENSE file in the root directory of this source tree.
 @author: Jan Behrens
 """
 
+import os
 import copy
 import itertools
 
@@ -594,26 +595,39 @@ class RoadmapPlannerNode:
                                      exp=self.exp_obj,
                                      EXECUTE_MOTION=EXECUTE_MOTION)
 
-        output = open(self.exp_obj.destination_folder + "/exp.pkl", 'wb')
-        pickle.dump(self.exp_obj, output, pickle.HIGHEST_PROTOCOL)
-        output.close()
+        self.save_to_file(self.exp_obj)
 
         for gn, rm in self.rp.roadmaps.items():
-            output = open(self.exp_obj.destination_folder + "/data_files/roadmaps/prm_{}.pkl".format(gn), 'w')
-            pickle.dump(rm, output, pickle.HIGHEST_PROTOCOL)
-            output.close()
+            self.save_to_file(rm, gn)
 
-        output = open(self.exp_obj.destination_folder + "/data_files/clashes/clash.pkl", 'w')
-        pickle.dump(self.rp.clash, output, pickle.HIGHEST_PROTOCOL)
-        output.close()
-
-        output = open(self.exp_obj.destination_folder + "/data_files/sosm.pkl", 'w')
-        pickle.dump(self.rp.sosm, output, pickle.HIGHEST_PROTOCOL)
-        output.close()
+        self.save_to_file(self.rp.sosm)
+        self.save_to_file(self.rp.clash)
 
         print self.exp_obj.destination_folder
 
         return res
+
+    def save_to_file(self, obj, name=""):
+        path_to_file = None
+        if isinstance(obj, RoadMap):
+            path_to_file = os.path.join(self.exp_obj.destination_folder, "data_files/roadmaps/prm_{}.pkl".format(name))
+        elif isinstance(obj, RoadMapClash):
+            path_to_file = os.path.join(self.exp_obj.destination_folder, "data_files/clashes/clash.pkl")
+        elif isinstance(obj, SceneObjectSearchMapping):
+            path_to_file = os.path.join(self.exp_obj.destination_folder, "data_files/sosm.pkl")
+        elif isinstance(obj, ovc_experiment):
+            path_to_file = os.path.join(self.exp_obj.destination_folder, "exp.pkl")
+
+        if not path_to_file:
+            return False
+
+        # create folder if necessary
+        if not os.path.exists((os.path.dirname(path_to_file))):
+            os.makedirs((os.path.dirname(path_to_file)))
+
+        with open(path_to_file, 'wb') as output:
+            pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
+        return True
 
 
 if __name__ == "__main__":

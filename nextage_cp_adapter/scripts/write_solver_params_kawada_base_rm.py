@@ -31,7 +31,7 @@ if __name__ == "__main__":
     # rospy.set_param(param_ns + '/EXECUTE_MOTION', True)
     # for kawada robot
     rospy.set_param(param_ns + '/ROADMAP_NAMES', {'right_arm': 'prm_right_arm_2018-09-06 10:21:01.967323', 'left_arm': 'prm_left_arm_2018-09-06 10:21:02.392609'})
-    rospy.set_param(param_ns + '/CLASH_NAME', "/home/beh2rng/OVC_DATA/clash_1536222850.36.pkl")
+    rospy.set_param(param_ns + '/CLASH_NAME', "clash_1536222850.36.pkl")
     rospy.set_param(param_ns + '/GROUP_NAMES', ['right_arm', 'left_arm'])
     rospy.set_param(param_ns + '/BASE_FRAME', 'WAIST')
     rospy.set_param(param_ns + '/COLLISION', True)

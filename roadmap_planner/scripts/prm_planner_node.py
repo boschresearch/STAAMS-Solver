@@ -403,6 +403,9 @@ class RoadmapPlannerNode:
         :return: success
         '''
 
+        if group not in self.rp.roadmaps.keys():
+            return False
+
         if use_location:
             loc2node = self.rp.sosm.get_alias_to_poses()
             my_state = [loc2node[group][s] for s in state]

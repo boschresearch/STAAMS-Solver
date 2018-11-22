@@ -40,12 +40,6 @@ Build it using [catkin-tools](https://catkin-tools.readthedocs.io/en/latest/).
 catkin build
 ```
 
-## License
-STAAMS-Solver is open-sourced under the BSD-3-Clause license. See the [LICENSE](LICENSE) file for details.
-
-For a list of other open source components included in Benchmarks, see the file 3rd-party-licenses.txt.
-
-
 ## Running the examples
 
 ### Four blocks example
@@ -68,3 +62,8 @@ rosrun cp_planning_examples four_blocks_01.py
 - [roadmap_planner_tools](roadmap_planner_tools/) is a ROS package which holds misc tools for the roadmap planner. Mainly a helper script to build a planner input data structure is provided
 - [roadmap_planner_common_msgs](roadmap_planning_common_msgs/) defines messages and services
 - [roadmap_tools](roadmap_tools/) holds data structures and ros nodes (scene-graph, roadmap, visualization)
+
+## License
+STAAMS-Solver is open-sourced under the BSD-3-Clause license. See the [LICENSE](LICENSE) file for details.
+
+For a list of other open source components included in Benchmarks, see the file 3rd-party-licenses.txt.

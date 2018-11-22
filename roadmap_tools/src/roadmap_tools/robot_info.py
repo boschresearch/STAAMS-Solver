@@ -46,11 +46,12 @@ class RobotInfo:
 
             for name, obj in inspect.getmembers(ri):
                 if inspect.isclass(obj):
-                    if name == "RobotInfo":
-                        continue
-                    class_name = name
-                    rospy.loginfo("Found class: {}".format(obj))
-                    break
+                    if "RobotInfo" in name:
+                        if name == "RobotInfo":
+                            continue
+                        class_name = name
+                        rospy.loginfo("Found class: {}".format(obj))
+                        break
             exec("robot_info = ri." + class_name + "()")
         except NameError:
             rospy.logerr("Parameter [SolverSetup/ROBOT_INFO_CLASS] is not provided. Can not import class")

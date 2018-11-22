@@ -52,6 +52,9 @@ class RoadMapClash:
         version = None
         if not file_format:
             try:
+                path = rospy.get_param("/SolverSetup/data_path", "")
+                path = os.path.expanduser(path)
+                file_name = os.path.join(path, file_name)
                 if os.path.exists(file_name):
                     with open(file_name, 'rb') as output:
                         loaded_clash = pickle.load(output)

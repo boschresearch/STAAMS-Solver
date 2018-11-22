@@ -171,7 +171,8 @@ class RoadMapClash:
         # type: (dict[str, RoadMap]) -> void
 
         for group in self.groups:
-            assert group in [clash_name[0] for clash_name in self.clashes.keys()]
+            if self.groups.__len__() > 1:
+                assert group in [clash_name[0] for clash_name in self.clashes.keys()]
             assert group in roadmaps.keys()
 
         for clash_key in self.clashes.keys():

@@ -1,9 +1,10 @@
 # STAAMS-Solver repository
 
-This repository provides a Simultaneous Task Allocation And Motion Scheduling (STAAMS) Solver based on Constraint Programming (CP) including a running example. The provided method is described in paper submitted to the Robotics and Automation Letters by Behrens et al [1].
+This repository provides a Simultaneous Task Allocation And Motion Scheduling (STAAMS) Solver based on Constraint Programming (CP), including a running example. The provided method is described in the paper "A Constraint Programming Approach to Simultaneous Task Allocation and Motion Scheduling for Industrial Dual-Arm Manipulation Tasks" by Behrens et al., accepted for ICRA 2019. An extended version of the paper is available at [arXiv:1901.07914 [cs.RO]](https://arxiv.org/abs/1901.07914).
 
-[1] Jan K. Behrens, Ralph Lange, Masoumeh Mansouri. A Constraint Programming Approach to Simultaneous Task Allocation and Motion Scheduling for Industrial Dual-Arm Manipulation Tasks. Submitted to RA-L 2019
+## Purpose of the project
 
+This software is a research prototype, solely developed for and published as part of the publications cited above. It will neither be maintained nor monitored in any way.
 
 ## Requirements, how to build, test, install, use, etc.
 
